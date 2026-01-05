@@ -5,7 +5,7 @@ permalink: /publications/
 author_profile: true
 ---
 
-This is an list of my recent publications, which you can also find on my [Google Scholar page](https://scholar.google.com/citations?user=S67jpMkAAAAJ&hl=en&oi=ao).
+This is an list of my recent publications (since 2023). See my [Google Scholar page](https://scholar.google.com/citations?user=S67jpMkAAAAJ&hl=en&oi=ao) for more.
 
 # 2025
 
