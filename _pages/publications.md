@@ -17,7 +17,7 @@ Zhang et al, "Artificial intelligence for science in quantum, atomistic, and con
 
 **Elyssa Hofgard**, Rui Wang, Robin Walters, Tess Smidt, "Relaxed Equivariant Graph Neural Networks," <ins>ICML 2024 Workshop on Geometry-grounded Representation Learning and Generative Modeling</ins>, 2024, [arXiv preprint](https://arxiv.org/abs/2407.20471).
 
-Rui Wang, **Elyssa Hofgard**, "Discovering Symmetry Breaking in Physical Systems with Relaxed Group Convolution," <ins>Forty-first International Conference on Machine Learning</ins>, 2024, [OpenReview](https://openreview.net/forum?id=59oXyDTLJv).
+Rui Wang, **Elyssa Hofgard**, Han Gao, Robin Walters, Tess Smidt, "Discovering Symmetry Breaking in Physical Systems with Relaxed Group Convolution," <ins>Forty-first International Conference on Machine Learning</ins>, 2024, [OpenReview](https://openreview.net/forum?id=59oXyDTLJv).
 
 # 2023
 
