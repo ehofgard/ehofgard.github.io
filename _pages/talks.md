@@ -5,7 +5,7 @@ permalink: /talks/
 author_profile: true
 ---
 
-Here are talks I've given recently (since 2023) and slides when possible.
+Here are talks I've given recently (since 2023).
 
 # 2025
 
