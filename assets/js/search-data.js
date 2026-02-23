@@ -23,7 +23,10 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/talks/";
           },
-        },{id: "teachings-data-science-fundamentals",
+        },{id: "news-our-paper-to-augment-or-not-to-augment-diagnosing-distributional-symmetry-breaking-has-been-accepted-at-iclr-2026",
+          title: 'Our paper To Augment or Not to Augment? Diagnosing Distributional Symmetry Breaking has...',
+          description: "",
+          section: "News",},{id: "teachings-data-science-fundamentals",
           title: 'Data Science Fundamentals',
           description: "This course covers the foundational aspects of data science, including data collection, cleaning, analysis, and visualization. Students will learn practical skills for working with real-world datasets.",
           section: "Teachings",handler: () => {
