@@ -23,6 +23,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/talks/";
           },
+        },{id: "nav-blog",
+          title: "blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
         },{id: "news-our-paper-to-augment-or-not-to-augment-diagnosing-distributional-symmetry-breaking-has-been-accepted-at-iclr-2026",
           title: 'Our paper To Augment or Not to Augment? Diagnosing Distributional Symmetry Breaking has...',
           description: "",
