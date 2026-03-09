@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: To Augment or Not to Augment? Diagnosing Distributional Symmetry Breaking
-description: "Symmetry-aware methods for machine learning, such as data augmentation and equivariant architectures, encourage correct model behavior on all transformations (e.g. rotations or permutations) of the original dataset. These methods can improve generalization and sample efficiency, under the assumption that the transformed datapoints are highly probable, or 'important', under the test distribution. In this work, we develop a method for critically evaluating this assumption. In particular, we propose a metric to quantify the amount of symmetry breaking in a dataset, via a two-sample classifier test that distinguishes between the original dataset and its randomly augmented equivalent. We validate our metric on synthetic datasets, and then use it to uncover surprisingly high degrees of symmetry-breaking in several benchmark point cloud datasets, constituting a severe form of dataset bias. We show theoretically that distributional symmetry-breaking can prevent invariant methods from performing optimally even when the underlying labels are truly invariant, for invariant ridge regression in the infinite feature limit. Empirically, the implication for symmetry-aware methods is dataset-dependent: equivariant methods still impart benefits on some symmetry-biased datasets, but not others, particularly when the symmetry bias is predictive of the labels. Overall, these findings suggest that understanding equivariance — both when it works, and why — may require rethinking symmetry biases in the data."
+description: Many popular ML datasets are heavily "canonicalized" — objects almost always appear in the same orientation. We measure this with a simple classifier test, showing theoretically that canonicalization can cause data augmentation to hurt performance. We give practitioners a flowchart for diagnosing their own datasets.
 date: 2026-03-02
 future: true
 htmlwidgets: true
@@ -115,10 +115,6 @@ _styles: >
   .harmful { color: #b00000; font-weight: 500; }
 ---
 
-<p style="font-size: 0.85em; color: #666;">* Equal contribution. Blog post written by Elyssa Hofgard.</p>
-
-**TL;DR:** Many popular ML datasets are heavily "canonicalized" — objects almost always appear in the same orientation. We build a simple classifier test to measure this, show theoretically that it can cause data augmentation to hurt performance, and give practitioners a flowchart for diagnosing their own datasets.
-
 ## Introduction
 
 For a group transformation $$g \in G$$ (e.g. a rotation or permutation), a model is **equivariant** if $$f(gx) = g f(x)$$ — rotating the input rotates the output — and **invariant** if $$f(gx) = f(x)$$ — the output is unchanged. Equivariant architectures enforce this by design; data augmentation encourages it by randomly applying $$g$$ to training inputs. Equivariant models have had successes in multiple domanains - materials science <d-cite key="liao2023equiformerv2"></d-cite>, robotics <d-cite key="wang2024equivariant"></d-cite>, drug discovery <d-cite key="igashov2024equivariant"></d-cite>, fluid dynamics <d-cite key="wangincorporating"></d-cite>, computer vision <d-cite key="esteves2019equivariant"></d-cite>, and beyond. 
@@ -133,7 +129,7 @@ Both approaches rely on the assumption that the ground truth function $$f$$ is e
 
 ## Distributional Symmetry Breaking
 
-{% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/orientations.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/orientations.png" class="img-fluid" %}
 <div class="caption">
     Examples of distributional symmetry breaking. Left: Baseballs appear in all orientations equally — the distribution is symmetric. Middle-left: Coffee mugs have a preferred orientation (handle to the side), illustrating a mild symmetry bias. Middle-right: Canonicalization maps arbitrary orientations to a single canonical one — the strongest form of symmetry breaking. Right: Inherent canonicalization (digits 6/9) and user-defined canonicalization (crystal lattice), where orientation is either intrinsically meaningful or fixed by convention.
 </div>
@@ -144,6 +140,8 @@ Distributional symmetry breaking may lead equivariant methods or data augmentati
 **The goal:** define a metric $$m(p_X)$$ that quantifies how far a data distribution $$p_X$$ is from being group-symmetric — without assuming symmetry in the first place.
 
 The key reference is the **symmetrized density** $$\bar{p}_X(x) := \int_{g \in G} p_X(gx)\, dg$$, the closest group-invariant distribution to $$p_X$$. Measuring $$m(p_X)$$ reduces to measuring how distinguishable $$p_X$$ and $$\bar{p}_X$$ are from finite samples.
+
+**Why not MMD?** A natural approach is Maximum Mean Discrepancy with a chosen kernel. But there is no universal kernel — for geometric graph datasets like molecular structures, choosing a kernel that captures chemical information is non-trivial, and the resulting values are not directly interpretable.
 
 **Our approach: a two-sample classifier test.** We train a small neural network to distinguish samples from $$p_X$$ (original) versus $$\bar{p}_X$$ (randomly transformed), and use **test accuracy** as the metric:
 
@@ -164,12 +162,12 @@ $$
 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
 
   <figure style="flex: 1; text-align: center;">
-    {% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/dataset_vis.png" class="img-fluid" %}
+    {% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/dataset_vis.png" class="img-fluid" %}
     <figcaption>Visualizations of unrotated samples from several materials datasets, with their canonicalization visible.</figcaption>
   </figure>
 
   <figure style="flex: 1; text-align: center;">
-    {% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/classifer_setup1.png" class="img-fluid" %}
+    {% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/classifer_setup1.png" class="img-fluid" %}
     <figcaption>A classifier test for determining if a sample is from the original dataset, or rotated.</figcaption>
   </figure>
 
@@ -198,12 +196,12 @@ To understand when augmentation can backfire, we analyze a tractable setting: hi
 
 **Takeaway:** Symmetry enforcement can hurt by discarding signal that, while technically non-invariant, is informative about the label via its correlation with invariant features.
 
-{% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/theory_fig.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/theory_fig.png" class="img-fluid" %}
 <div class="caption">
     Summary of theoretical results. Rows: weak vs. strong correlation between invariant and non-invariant features. Columns: under- vs. over-parameterized regime. Augmentation can hurt in the over-parameterized + strong correlation setting, where non-invariant features act as proxies for invariant ones.
 </div>
 
-{% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/data_aug_risk.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/data_aug_risk.png" class="img-fluid" %}
 <div class="caption">
     Left three panels: Excess risk, bias, and variance of vanilla (blue) vs. augmented (orange) models as feature correlation strength \(\sigma_w\) varies. At low \(\sigma_w\) (strongly correlated features, high symmetry breaking), augmentation increases excess risk — driven by higher variance. Right: Corresponding \(m(p_X)\) values, which are highest at low \(\sigma_w\), confirming the metric tracks symmetry breaking accurately.
 </div>
@@ -228,7 +226,7 @@ We measure $$m(p_X)$$ on multiple benchmark datasets. Strikingly, many widely-us
 
 We evaluate equivariant, group-averaged, and stochastic group-averaged models on each dataset. The results are summarized below.
 
-{% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/model_table.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/model_table.png" class="img-fluid" %}
 <div class="caption">
     Comparison of train/test augmentation, group-averaged, and equivariant models across datasets. Augmentation: TT = train+test, TF = train only, FT = test only, FF = none. MNIST uses a group-averaged model; other datasets use stochastic group-averaging. MAE is reported for QM7b/QM9; equivariant baselines from e3nn. Best overall in bold, best within augmentation underlined. CNN used for MNIST, graph transformer for point clouds.
 </div>
@@ -297,7 +295,7 @@ We apply $$t(p_{X,Y})$$ to each dataset to ask: does the canonical orientation a
 
 - **QM9:** $$t \approx 1$$ — canonical orientation carries little task-relevant information globally. Equivariance does destroy orientation, but since that orientation wasn't predictive to begin with, nothing useful is lost. This is consistent with equivariance helping.
 
-{% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/task_dependent_results.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/task_dependent_results.png" class="img-fluid" %}
 <div class="caption">
     Task-dependent metric \(t(p_{X,Y})\): Accuracy (ModelNet) or MAE (QM7b/QM9) when predicting labels from the canonicalization vs. a random-rotation baseline. Values averaged over five seeds. Higher ratio = more task-relevant signal in the orientation.
 </div>
@@ -313,7 +311,7 @@ Equivariant models compute locally equivariant features over receptive fields <d
 - **QM9:** Local bond neighborhoods have much lower $$m(p_X)$$ than the full molecule — local structure is close to isotropic even when the global dataset is canonicalized. Equivariant models can exploit this local symmetry.
 - **ModelNet40:** Local neighborhoods also show lower $$m(p_X)$$ at small sizes, but canonical alignment re-emerges as neighborhoods grow — the canonical orientation is object-level and tightly coupled to the task.
 
-{% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/locality_exp.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/locality_exp.png" class="img-fluid" %}
 <div class="caption">
     Left: Local QM9 neighborhoods and their \(m(p_X)\) values. Right: Local ModelNet40 results as neighborhood size grows.
 </div>
@@ -324,7 +322,7 @@ Equivariant models compute locally equivariant features over receptive fields <d
 
 Based on these findings, we provide the following flowchart as a practical guide for deciding whether to use equivariant methods or data augmentation on a new dataset:
 
-{% include figure.liquid path="assets/img/2026-03-02-ToAugmentOrNot/symm_breaking_flowchart.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-02-10-ToAugmentOrNot/symm_breaking_flowchart.png" class="img-fluid" %}
 <div class="caption">
     Advice for practitioners on using our metric for model selection.
 </div>
