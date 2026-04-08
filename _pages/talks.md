@@ -7,6 +7,13 @@ nav: true
 nav_order: 3
 ---
 
+## 2026
+
+**"Using Equivariant Neural Networks to Learn Multipolar Order Parameters"**
+APS Global Physics Summit 2026 &bull; [[Abstract]](https://summit.aps.org/events/MAR-C38/11)
+
+---
+
 ## 2025
 
 **"Applications of Topological Data Analysis (TDA) for Studying Structural Motifs in Amorphous Bi₂Se₃"**

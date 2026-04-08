@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: To Augment or Not to Augment? Diagnosing Distributional Symmetry Breaking
-description: Many popular ML datasets are heavily "canonicalized" — objects almost always appear in the same orientation. We measure this with a simple classifier test, showing theoretically that canonicalization can cause data augmentation to hurt performance. We give practitioners a flowchart for diagnosing their own datasets.
+description: Many popular ML datasets are heavily canonicalized — objects almost always appear in the same orientation. We measure this with a simple classifier test, showing theoretically that canonicalization can cause data augmentation to hurt performance. We give practitioners a flowchart for diagnosing their own datasets.
 date: 2026-03-02
 future: true
 htmlwidgets: true
